@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +18,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,16 +67,17 @@ fun CoinListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF4F5F7))
             .padding(horizontal = 16.dp)
     ) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Başlık
         Text(
             text = "Coin Tracker",
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF111827)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -90,7 +94,13 @@ fun CoinListScreen(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp)),
             singleLine = true,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color(0xFF6C63FF),
+                unfocusedBorderColor = Color(0xFFE5E7EB)
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -102,7 +112,9 @@ fun CoinListScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = Color(0xFF6C63FF)
+                    )
                 }
             }
 
@@ -115,7 +127,8 @@ fun CoinListScreen(
 
             else -> {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 24.dp)
                 ) {
                     items(visibleCoins) { coin ->
                         CoinItem(
@@ -144,6 +157,12 @@ fun CoinItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        ),
         onClick = onClick
     ) {
         Row(
@@ -153,7 +172,6 @@ fun CoinItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            // Gradient Circle
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -161,8 +179,8 @@ fun CoinItem(
                     .background(
                         brush = Brush.linearGradient(
                             listOf(
-                                Color(0xFF7B61FF),
-                                Color(0xFF5E5CE6)
+                                Color(0xFF8E8DFF),
+                                Color(0xFF6C63FF)
                             )
                         )
                     ),
@@ -183,7 +201,8 @@ fun CoinItem(
                 Text(
                     text = coin.symbol,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF111827)
                 )
 
                 Text(
@@ -199,15 +218,16 @@ fun CoinItem(
 
                 Text(
                     text = "$${coin.lastPrice}",
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF111827)
                 )
 
                 Text(
                     text = "${coin.priceChangePercent}%",
                     color = if (isPositive)
-                        Color(0xFF00C853)
+                        Color(0xFF16A34A)
                     else
-                        Color(0xFFD50000)
+                        Color(0xFFDC2626)
                 )
             }
         }

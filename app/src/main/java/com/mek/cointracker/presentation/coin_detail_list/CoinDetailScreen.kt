@@ -1,6 +1,5 @@
 package com.mek.cointracker.presentation.coin_detail_list
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,8 +17,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,7 +46,6 @@ fun CoinDetailScreen(
     onBackClick: () -> Unit,
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsState()
     val coin = state.coin
 
@@ -53,8 +53,11 @@ fun CoinDetailScreen(
         viewModel.onEvent(CoinDetailEvent.LoadCoin(symbol))
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF4F5F7))
+    ) {
         when {
             state.isLoading -> {
                 CircularProgressIndicator(
@@ -85,7 +88,6 @@ fun DetailContent(
     coin: CoinDetail,
     onBackClick: () -> Unit
 ) {
-
     val isPositive = coin.priceChangePercent >= 0
 
     Column(
@@ -104,29 +106,30 @@ fun DetailContent(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFF2F2F2))
+                    .background(Color(0xFFE5E7EB)) // beyaz yerine hafif gri
                     .clickable { onBackClick() },
                 contentAlignment = Alignment.Center
             ) {
-                Image(
+                Icon(
                     painter = painterResource(id = R.drawable.arrow_back_24px),
                     contentDescription = "Geri",
+                    tint = Color(0xFF111827), // koyu gri, net görünür
                     modifier = Modifier.size(20.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = "Detay",
+                text = "Geri",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF111827)
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        // ÜST HERO ALAN
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             Box(
@@ -135,7 +138,10 @@ fun DetailContent(
                     .clip(CircleShape)
                     .background(
                         brush = Brush.linearGradient(
-                            listOf(Color(0xFF7B61FF), Color(0xFF5E5CE6))
+                            listOf(
+                                Color(0xFF8E8DFF),
+                                Color(0xFF6C63FF)
+                            )
                         )
                     ),
                 contentAlignment = Alignment.Center
@@ -153,7 +159,8 @@ fun DetailContent(
                 Text(
                     text = coin.symbol,
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF111827)
                 )
                 Text(
                     text = "${coin.symbol}/USDT",
@@ -167,7 +174,8 @@ fun DetailContent(
         Text(
             text = "$${coin.lastPrice}",
             style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF111827)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -176,22 +184,23 @@ fun DetailContent(
             modifier = Modifier
                 .clip(RoundedCornerShape(50))
                 .background(
-                    if (isPositive) Color(0xFFDFF6E3)
-                    else Color(0xFFFFE2E2)
+                    if (isPositive) Color(0xFFE8F7EE)
+                    else Color(0xFFFDECEC)
                 )
                 .padding(horizontal = 12.dp, vertical = 6.dp)
         ) {
             Text(
                 text = "${if (isPositive) "↗" else "↘"} ${coin.priceChangePercent}%",
-                color = if (isPositive) Color(0xFF00C853) else Color(0xFFD50000)
+                color = if (isPositive) Color(0xFF16A34A) else Color(0xFFDC2626)
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 24 SAAT İSTATİSTİK KARTI
         Card(
             shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -207,32 +216,38 @@ fun DetailContent(
                     title = "En Yüksek",
                     value = "$${coin.highPrice}",
                     iconRes = R.drawable.trending_up_24px,
-                    iconBackground = Color(0xFFDFF6E3)
+                    iconBackground = Color(0xFFE8F7EE),
+                    iconTint = Color(0xFF16A34A)
                 )
-                Divider()
+
+                HorizontalDivider()
 
                 StatItem(
                     title = "En Düşük",
                     value = "$${coin.lowPrice}",
                     iconRes = R.drawable.trending_down_24px,
-                    iconBackground = Color(0xFFFFE2E2)
+                    iconBackground = Color(0xFFFDECEC),
+                    iconTint = Color(0xFFDC2626)
                 )
-                Divider()
+
+                HorizontalDivider()
 
                 StatItem(
                     title = "İşlem Hacmi (24s)",
                     value = "$${coin.volume}",
                     iconRes = R.drawable.bar_chart_4_bars_24px,
-                    iconBackground = Color(0xFFE3F2FD)
+                    iconBackground = Color(0xFFE3F2FD),
+                    iconTint = Color(0xFF2563EB)
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // FİYAT ARALIĞI
         Card(
             shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -244,16 +259,21 @@ fun DetailContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val range =
-                    (coin.lastPrice - coin.lowPrice) /
-                            (coin.highPrice - coin.lowPrice)
+                val priceDiff = coin.highPrice - coin.lowPrice
+                val range = if (priceDiff > 0) {
+                    (coin.lastPrice - coin.lowPrice) / priceDiff
+                } else {
+                    0.0
+                }
 
                 LinearProgressIndicator(
-                    progress = range.toFloat().coerceIn(0f, 1f),
+                    progress = { range.toFloat().coerceIn(0f, 1f) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp)
-                        .clip(RoundedCornerShape(50))
+                        .clip(RoundedCornerShape(50)),
+                    color = Color(0xFF6C63FF),
+                    trackColor = Color(0xFFE5E7EB)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -274,7 +294,8 @@ fun StatItem(
     title: String,
     value: String,
     iconRes: Int,
-    iconBackground: Color
+    iconBackground: Color,
+    iconTint: Color
 ) {
     Row(
         modifier = Modifier
@@ -290,9 +311,10 @@ fun StatItem(
                 .background(iconBackground),
             contentAlignment = Alignment.Center
         ) {
-            Image(
+            Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = null,
+                tint = iconTint,
                 modifier = Modifier.size(20.dp)
             )
         }
@@ -309,7 +331,8 @@ fun StatItem(
             )
             Text(
                 text = value,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF111827)
             )
         }
     }
