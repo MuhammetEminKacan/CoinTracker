@@ -1,4 +1,4 @@
-package com.mek.cointracker.ui.theme
+package com.mek.cointracker.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
